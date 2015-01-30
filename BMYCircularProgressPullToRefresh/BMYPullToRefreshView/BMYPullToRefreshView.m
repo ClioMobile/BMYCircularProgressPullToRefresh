@@ -65,13 +65,12 @@ static CGFloat const kPullToRefreshDragToTrigger = 80;
 #pragma mark - Public Methods
 
 - (void)startAnimating {
-    self.state = BMYPullToRefreshStateTriggered;
+    self.state = BMYPullToRefreshStateLoading;
     
     if (fequalzero(_scrollView.contentOffset.y)) {
         [_scrollView setContentOffset:CGPointMake(_scrollView.contentOffset.x, -CGRectGetHeight(self.frame)) animated:YES];
     }
     
-    self.state = BMYPullToRefreshStateLoading;
 }
 
 - (void)stopAnimating {
@@ -113,6 +112,10 @@ static CGFloat const kPullToRefreshDragToTrigger = 80;
                                      [_activityIndicatorView startAnimating];
                                      _pullToRefreshActionHandler(self);
                                  }];
+            } else if (previousState == BMYPullToRefreshStateStopped) {
+                _progressView.alpha = 0.0f;
+                _activityIndicatorView.alpha = 1.0f;
+                [_activityIndicatorView startAnimating];
             }
             break;
         }
